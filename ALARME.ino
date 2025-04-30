@@ -1,12 +1,12 @@
 #include <Wire.h>
-#include <LiquidCrystal_I2C.h>
+#include <LiquidCrystal.h>
 
 #define TRIG_PIN 9
 #define ECHO_PIN 10
 #define BUZZER_PIN 8
+LiquidCrystal lcd(12, 11, 5, 4, 3, 2);
 
-int led_pins[] = {13, 7, 6, 5, 4};
-LiquidCrystal_I2C lcd(0x27, 16, 2);
+int led_pins[] = {13, 7, 6};
 
 void setup() {
   pinMode(TRIG_PIN, OUTPUT);
@@ -17,11 +17,9 @@ void setup() {
     pinMode(led_pins[i], OUTPUT);
   }
 
-  lcd.begin(); // Initialisation de l'écran LCD I2C
-  lcd.backlight();
-  lcd.setCursor(0, 0);
-  lcd.print("Distance: ");
   Serial.begin(9600);
+  lcd.begin(16, 2);  // Initialisation de l'écran LCD
+  lcd.print("Distance: ");
 }
 
 float recup_distance() {
@@ -53,12 +51,10 @@ void loop() {
   }
   digitalWrite(BUZZER_PIN, LOW);
 
-  if (distance <= 200) {digitalWrite(led_pins[0], HIGH);}
+  if (distance <= 300) {digitalWrite(led_pins[0], HIGH);}
   if (distance <= 150) {digitalWrite(led_pins[1], HIGH);}
-  if (distance <= 100) {digitalWrite(led_pins[2], HIGH);}
-  if (distance <= 50) {digitalWrite(led_pins[3], HIGH);}
-  if (distance <= 25) {
-    digitalWrite(led_pins[4], HIGH);
+  if (distance <= 75) {
+    digitalWrite(led_pins[2], HIGH);
     digitalWrite(BUZZER_PIN, HIGH);
   }
 
